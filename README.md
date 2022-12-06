@@ -92,7 +92,7 @@ function backup(){
         done
 
 
-        echo "tar cf - ${COMPRESS} ${WHERE2BACKUP} ${WHAT2BACKUP}"
+        tar cf${COMPRESS} ${WHERE2BACKUP}/BACKUPFILE ${WHAT2BACKUP}"
         sleep 5
 }
 
@@ -131,8 +131,8 @@ function deletebackup(){
             deletebackup
             echo "Sind sie sicher, dass sie das Backup $DELETEBACKUP löschen wollen?"
             read -p "0:nein |1:ja    :" YESNO
+	    
         done
-
 	
 }
 
