@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#Alles über Backups
-# Autor:Michael Rößler
+# Backupscript
+# Autor: Michael Rößler
 # E-Mail : roesslermi@mail-elektronikschule.de
 # Version: 1
 
@@ -11,7 +11,7 @@ function menu(){
 	echo "|---------------------------------------------------|"
 	echo "| Haupmenu:                                         |"
 	echo "|                                                   |"
-    echo "|      Backup erstellen:              B             |"
+        echo "|      Backup erstellen:              B             |"
 	echo "|      Inhalt eines Backups:          L             |"
 	echo "|      Backup zurück spielen:         R             |"
 	echo "|      Backup löschen:                D             |"
@@ -37,7 +37,7 @@ function compress(){
 function where2Backup(){
 	clear
 	echo "|----------------------------------------------|"
-	echo "| Wo soll das Backup gespeichert werden:    |"
+	echo "| Wo soll das Backup gespeichert werden:       |"
 	echo "|                                              |"
 	read -p "| Eingabe: " WHERE2BACKUP
 }
@@ -46,7 +46,7 @@ function where2Backup(){
 function what2Backup(){
 	clear
 	echo "|----------------------------------------------|"
-	echo "| Was soll als Backup gespeichert werden:    |"
+	echo "| Was soll als Backup gespeichert werden:      |"
 	echo "|                                              |"
 	read -p "| Eingabe: " WHAT2BACKUP
 }
@@ -60,19 +60,18 @@ function what2Backup(){
 function type(){
 	clear
 	echo "|----------------------------------------------|"
-	echo "| Welcher Datentyp hat das Backup:         |"
+	echo "| Welcher Datentyp hat das Backup:             |"
 	echo "|                                              |"
 	read -p "| Eingabe: " TYPE
 }
 
 function backup(){
-        DATEINAME
-        echo "BACKUP"
+        BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
         YESNO=0
         until [ $YESNO = 1 ]
         do
             compress
-            echo "Sind sie sicher, dass sie die option $COMPRESS ausführen wollen?"
+            echo "Sind sie sicher, dass sie die option ${COMPRESS} ausführen wollen?"
             read -p "0:nein |1:ja    :" YESNO
         done
 
@@ -80,7 +79,7 @@ function backup(){
         until [ $YESNO = 1 ]
         do
             where2Backup
-            echo "Sind sie sicher, dass sie hier hin speichern möchten $WHERE2BACKUP?"
+            echo "Sind sie sicher, dass sie hier hin speichern möchten: ${WHERE2BACKUP}?"
             read -p "0:nein |1:ja    :" YESNO
         done
 
@@ -88,12 +87,12 @@ function backup(){
         until [ $YESNO = 1 ]
         do
             what2Backup
-            echo "Sind sie sicher, dass sie dieses Verzeichnis speichern wollen $WHAT2BACKUP?"
+            echo "Sind sie sicher, dass sie dieses Verzeichnis speichern wollen ${WHAT2BACKUP}?"
             read -p "0:nein |1:ja    :" YESNO
         done
 
 
-        echo "tar cf - ${COMPRESS} $where2Backup $what2Backup"
+        echo "tar cf - ${COMPRESS} ${WHERE2BACKUP} ${WHAT2BACKUP}"
         sleep 5
 }
 
@@ -106,6 +105,7 @@ function listbackup(){
 }
 
 function deletebackup(){
+	
         YESNO=0
         until [ $YESNO = 1 ]
         do
@@ -118,12 +118,20 @@ function deletebackup(){
         until [ $YESNO = 1 ]
         do
             type
-            echo "Sind sie sicher, dass sie das Backup mit dem Datentyp $TYPE löschen wollen?"
+            echo "Sind sie sicher, dass sie das Backup mit dem Datentyp $TYPE suchen wollen?"
             read -p "0:nein |1:ja    :" YESNO
         done
         
         echo "find $WHERE -name *.$TYPE -typ -f"
         sleep 5
+	
+	YESNO=0
+        until [ $YESNO = 1 ]
+        do
+            deletebackup
+            echo "Sind sie sicher, dass sie das Backup $DELETEBACKUP löschen wollen?"
+            read -p "0:nein |1:ja    :" YESNO
+        done
 
 	
 }
